@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { RkButton } from 'react-native-ui-kitten'
-import { createStackNavigator, createAppContainer  } from 'react-navigation'
+import { createStackNavigator, createAppContainer, createSwitchNavigator  } from 'react-navigation'
 import Register from './screens/Register'
 import Login from './screens/Login'
+import Diskon from './screens/Diskon'
+import Home from './screens/Home'
 
 export default class App extends React.Component {
   render() {
@@ -13,9 +14,11 @@ export default class App extends React.Component {
   }
 }
 
-const AppNavigator = createStackNavigator({
+const AppNavigator = createSwitchNavigator({
   Login: { screen: Login },
-  Register: { screen: Register }
+  Register: { screen: Register },
+  Diskon: { screen: Diskon },
+  Home: { screen: Home }
 })
 
 const styles = StyleSheet.create({

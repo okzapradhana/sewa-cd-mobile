@@ -37,6 +37,7 @@ class Login extends Component {
           rkType="bordered"
           placeholder="Password" />
         <RkButton
+          onPress={() => navigate('Home')}
           style={{ marginTop: 10, width: 250, backgroundColor: '#f4511e' }}
           >
           Login

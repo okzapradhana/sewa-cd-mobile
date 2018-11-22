@@ -20,7 +20,7 @@ class Register extends Component {
     },
     headerTintColor: '#fff',
   }
-
+  
   // items = [
   //   {
   //     id: 1,
@@ -66,7 +66,7 @@ class Register extends Component {
         <Text style={styles.title}>SEWA CD</Text>
         {/* {this.renderContent()} */}
         <RkTextInput
-          onChangeText={(value) => this.setState({ nama: value })}
+          onChangeText={(value) => this.setState({ nama : value })}
           style={styles.input}
           value={this.state.nama}
           placeholder="Nama"
