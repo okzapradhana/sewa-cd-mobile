@@ -42,9 +42,13 @@ class Home extends Component {
     this.setState({ allCd: allCd, isLoading: false })
   }
 
+  _onPress = () => {
+    console.log('Clicked card')
+  }
+
   renderContent = (item) => {
     return (
-      <Card minHeight={100} title={item.name}>
+      <Card onPress = {this._onPress} minHeight={100} title={item.name}>
         <View style={styles.cardContent}>
           <Text>{`Price: Rp. ${item.harga}`}</Text>
           <Text>{`Stock: ${item.stock}`}</Text>

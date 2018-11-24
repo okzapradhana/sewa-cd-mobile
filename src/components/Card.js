@@ -1,26 +1,31 @@
 import React, { Component } from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native'
 import { color } from '../libs/metrics'
 
 /*Card Component
   Props: title , minHeight
 */
 
+
+
 class Card extends Component {
+
   render() {
     return (
-      <View style={styles.container}>
-        <View style={[styles.wrapper, this.props.minHeight ? {minHeight: this.props.minHeight} : {minHeight: 200}]}>
-          {this.props.title &&
-            <View style={styles.title}>
-              <Text style={styles.textTitle}>{this.props.title}</Text>
+      <TouchableWithoutFeedback onPress={this.props.onPress}>
+        <View style={styles.container}>
+          <View style={[styles.wrapper, this.props.minHeight ? { minHeight: this.props.minHeight } : { minHeight: 200 }]}>
+            {this.props.title &&
+              <View style={styles.title}>
+                <Text style={styles.textTitle}>{this.props.title}</Text>
+              </View>
+            }
+            <View style={styles.content}>
+              {this.props.children}
             </View>
-          }
-          <View style={styles.content}>
-            {this.props.children}
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     )
   }
 }
