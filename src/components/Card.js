@@ -6,7 +6,7 @@ class Card extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.wrapper}>
+        <View style={[styles.wrapper, this.props.minHeight ? {minHeight: this.props.minHeight} : {minHeight: 200}]}>
           {this.props.title ?
             <View style={styles.title}>
               <Text style={styles.textTitle}>{this.props.title}</Text>
@@ -25,13 +25,13 @@ class Card extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10
+    justifyContent: "center"
   },
   wrapper: {
     flex: 1,
     borderRadius: 10,
     elevation: 3,
-    minHeight: 100,
+    marginTop: 20,
     justifyContent: 'center',
     backgroundColor: '#fff'
   },

@@ -1,13 +1,14 @@
-import React, { Component } from 'react'
-import { View } from 'react-native'
+import React, { Component } from 'react';
+import { View, Text } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { color } from '../libs/metrics';
+import Card from '../components/Card';
 
-class Diskon extends Component{
+class Profile extends Component{
   
   static navigationOptions = ({ navigation }) => ({
-    title: 'Diskon',
-    drawerLabel: 'Diskon',
+    title: 'Profile',
+    drawerLabel: 'Profile',
 
     headerStyle: {
       backgroundColor: color.primary,
@@ -33,4 +34,4 @@ class Diskon extends Component{
   }
 }
 
-export default Diskon
+export default Profile

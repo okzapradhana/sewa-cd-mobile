@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 export const color = {
   primary: '#f4511e',
   white: '#fff',
+  whiteTransparency: '#CCFFFFFF',
   black: '#000000',
   disabled: 'grey'
 };

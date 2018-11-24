@@ -3,9 +3,15 @@ import Register from './screens/Register'
 import Login from './screens/Login'
 import Diskon from './screens/Diskon'
 import Home from './screens/Home'
+import Profile from './screens/Profile';
+import { color } from './libs/metrics';
 
 const HomeStack = createStackNavigator({
   Home: Home
+})
+
+const ProfileStack = createStackNavigator({
+  Profile: Profile
 })
 
 const DiskonStack = createStackNavigator({
@@ -14,15 +20,16 @@ const DiskonStack = createStackNavigator({
 
 const HomeNavigator = createDrawerNavigator({
   Home: HomeStack,
-  Diskon: DiskonStack
+  Diskon: DiskonStack,
+  Profile: ProfileStack
 },
   {
     drawerPosition: 'left',
     initialRouteName: 'Home',
     drawerBackgroundColor: '#f4511e',
     contentOptions:{
-      activeTintColor: 'white',
-      inactiveTintColor: 'white'
+      activeTintColor: color.white,
+      inactiveTintColor: color.whiteTransparency
     }
   }
 )
