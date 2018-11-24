@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { RkButton, RkTextInput } from 'react-native-ui-kitten'
 import NavigationService from '../libs/NavigationService';
-import { AsyncStorage } from 'react-native'
 import { login } from '../controllers/UserController';
 import { readLocalAuthToken } from '../libs/api';
+import { color } from '../libs/metrics';
 
 class Login extends Component {
 
   state = {
     name: '',
-    password: ''
+    password: '',
+    isLoading: false,
   }
 
   static navigationOptions = {
@@ -21,23 +22,26 @@ class Login extends Component {
     headerTintColor: '#fff',
   }
 
-  componentDidMount = async() => {
+  componentDidMount = async () => {
     const token = await readLocalAuthToken()
-    if(token){
+    if (token) {
       NavigationService.navigate('Home')
     }
   }
 
-  login = async() => {
+  login = async () => {
     const { name, password } = this.state
+    this.setState({ isLoading: true })
     const res = await login(name, password)
-    if(res.error === ''){
+    this.setState({ isLoading: false })
+    if (res.error === '') {
       NavigationService.navigate('Home')
     }
   }
 
   render() {
     const { navigate } = this.props.navigation
+    const { isLoading } = this.state
     return (
       <View style={styles.container}>
         <Text style={styles.title}>SEWA CD</Text>
@@ -47,19 +51,32 @@ class Login extends Component {
           value={this.state.name}
           rkType="bordered"
           placeholder="Name"
-           />
+        />
         <RkTextInput
           onChangeText={(value) => this.setState({ password: value })}
           style={styles.input}
           value={this.state.password}
           rkType="bordered"
+          secureTextEntry
           placeholder="Password" />
-        <RkButton
-          onPress={this.login}
-          style={{ marginTop: 10, width: 250, backgroundColor: '#f4511e' }}
+
+        {!isLoading ? (
+          <RkButton
+            onPress={this.login}
+            style={{ marginTop: 10, width: 250, backgroundColor: color.primary }}
           >
-          Login
+            Login
         </RkButton>
+        ) :
+          (
+            <View style={styles.loadingIndicator}>
+              <ActivityIndicator
+                size="large"
+                color={color.primary}
+              />
+            </View>
+          )
+        }
         <Text
           style={{ marginTop: 10 }}
           onPress={() => navigate('Register')}>
@@ -89,7 +106,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: '#f4511e'
-  }
+  },
+  loadingIndicator: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 })
 
 export default Login

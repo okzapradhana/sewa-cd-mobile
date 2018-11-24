@@ -45,8 +45,10 @@ class Home extends Component {
   renderContent = (item) => {
     return (
       <Card minHeight={100} title={item.name}>
-        <Text>{`Price: Rp. ${item.harga}`}</Text>
-        <Text>{`Stock: ${item.stock}`}</Text>
+        <View style={styles.cardContent}>
+          <Text>{`Price: Rp. ${item.harga}`}</Text>
+          <Text>{`Stock: ${item.stock}`}</Text>
+        </View>
       </Card>
     )
   }
@@ -82,12 +84,17 @@ class Home extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10
+    padding: 10,
+    paddingBottom: 30,
   },
   loadingIndicator: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  cardContent:{
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   }
 })
 
