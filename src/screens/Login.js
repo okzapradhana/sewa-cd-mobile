@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { RkButton, RkTextInput } from 'react-native-ui-kitten'
+import NavigationService from '../libs/NavigationService';
+import { AsyncStorage } from 'react-native'
+import { login } from '../controllers/UserController';
+import { readLocalAuthToken } from '../libs/api';
 
 class Login extends Component {
 
   state = {
-    email: '',
+    name: '',
     password: ''
   }
 
@@ -15,7 +19,21 @@ class Login extends Component {
       backgroundColor: '#f4511e',
     },
     headerTintColor: '#fff',
-    
+  }
+
+  componentDidMount = async() => {
+    const token = await readLocalAuthToken()
+    if(token){
+      NavigationService.navigate('Home')
+    }
+  }
+
+  login = async() => {
+    const { name, password } = this.state
+    const res = await login(name, password)
+    if(res.error === ''){
+      NavigationService.navigate('Home')
+    }
   }
 
   render() {
@@ -24,11 +42,11 @@ class Login extends Component {
       <View style={styles.container}>
         <Text style={styles.title}>SEWA CD</Text>
         <RkTextInput
-          onChangeText={(value) => this.setState({ email: value })}
+          onChangeText={(value) => this.setState({ name: value })}
           style={styles.input}
-          value={this.state.email}
+          value={this.state.name}
           rkType="bordered"
-          placeholder="Email"
+          placeholder="Name"
            />
         <RkTextInput
           onChangeText={(value) => this.setState({ password: value })}
@@ -37,7 +55,7 @@ class Login extends Component {
           rkType="bordered"
           placeholder="Password" />
         <RkButton
-          onPress={() => navigate('Home')}
+          onPress={this.login}
           style={{ marginTop: 10, width: 250, backgroundColor: '#f4511e' }}
           >
           Login

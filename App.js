@@ -1,25 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { createStackNavigator, createAppContainer, createSwitchNavigator  } from 'react-navigation'
-import Register from './screens/Register'
-import Login from './screens/Login'
-import Diskon from './screens/Diskon'
-import Home from './screens/Home'
+import { StyleSheet } from 'react-native';
+import NavigationService from './src/libs/NavigationService';
+import AppNavigator from './src/Navigation';
 
 export default class App extends React.Component {
   render() {
     return (
-      <AppContainer/>
+      <AppNavigator ref={ref => NavigationService.setTopNavigator(ref)}/>
     );
   }
 }
-
-const AppNavigator = createSwitchNavigator({
-  Login: { screen: Login },
-  Register: { screen: Register },
-  Diskon: { screen: Diskon },
-  Home: { screen: Home }
-})
 
 const styles = StyleSheet.create({
   container: {
@@ -32,5 +22,3 @@ const styles = StyleSheet.create({
     marginTop: '20dp'
   }
 });
-
-const AppContainer = createAppContainer(AppNavigator)
