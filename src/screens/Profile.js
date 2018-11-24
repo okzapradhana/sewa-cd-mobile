@@ -79,6 +79,7 @@ class Profile extends Component {
           (
             <View>
               <FlatList
+                contentContainerStyle={{padding: 8}}
                 refreshing={this.state.refreshData}
                 onRefresh={() => this.getProfileDetail()}
                 data={profile}

@@ -68,6 +68,7 @@ class Home extends Component {
         ) :
           (
             <FlatList
+              contentContainerStyle={{padding: 8}}
               refreshing={this.state.refreshData}
               onRefresh={() => this.getCDList()}
               data={allCd}
@@ -85,7 +86,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    paddingBottom: 30,
   },
   loadingIndicator: {
     flex: 1,

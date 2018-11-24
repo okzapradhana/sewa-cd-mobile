@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     borderRadius: 10,
-    elevation: 5,
+    elevation: 2,
     marginTop: 20,
     justifyContent: 'center',
     backgroundColor: '#fff'
