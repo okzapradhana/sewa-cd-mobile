@@ -74,6 +74,8 @@ class AddCD extends Component {
     if (addCDResp.affectedRows > 0) {
       Toast.success('Berhasil tambah CD', 2)
       NavigationService.navigate('Home')
+    } else{
+      Toast.fail('Gagal tambah CD', 2)
     }
   }
 

@@ -3,6 +3,12 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { color } from '../libs/metrics';
 
+
+/*FloatingButton Component
+  Props:
+  onPress: void
+*/
+
 export class FloatingButton extends Component {
   render() {
     return (

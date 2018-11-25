@@ -5,6 +5,7 @@ import NavigationService from '../libs/NavigationService';
 import { login } from '../controllers/UserController';
 import { readLocalAuthToken } from '../libs/api';
 import { color } from '../libs/metrics';
+import Toast from 'antd-mobile-rn/lib/toast'
 
 class Login extends Component {
 
@@ -35,6 +36,7 @@ class Login extends Component {
     const res = await login(name, password)
     this.setState({ isLoading: false })
     if (res.error === '') {
+      Toast.success('Berhasil Login', 2)
       NavigationService.navigate('Home')
     }
   }

@@ -26,12 +26,16 @@ const GenreStack = createStackNavigator({
   Genre: Genre
 })
 
+const UsersStack = createStackNavigator({
+  Users: Users
+})
+
 const HomeNavigator = createDrawerNavigator({
   Home: HomeStack,
   Diskon: DiskonStack,
   Genre: GenreStack,
   Profile: ProfileStack,
-  Users: Users
+  Users: UsersStack
 },
   {
     drawerPosition: 'left',

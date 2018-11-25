@@ -3,9 +3,11 @@ import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native'
 import { color } from '../libs/metrics'
 
 /*Card Component
-  Props: title , minHeight
+  Props: 
+  title: String
+  minHeight: number
+  onPress: void
 */
-
 
 
 class Card extends Component {

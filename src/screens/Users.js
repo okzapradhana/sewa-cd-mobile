@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, ActivityIndicator, FlatList, StyleSheet } from 'react-native'
+import { View, Text, ActivityIndicator, FlatList, StyleSheet, Image } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { color } from '../libs/metrics';
 import Card from '../components/Card';
@@ -34,24 +34,30 @@ class Users extends Component {
 
   renderContent = (item) => {
     return (
-      <Card title={item.name} minHeight={150}>
+      <Card title={item.name.toUpperCase()} minHeight={150}>
         <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <View style={styles.codeAndDisc}>
-            <Text>{`Name: ${item.name}`}</Text>
+          <View style={styles.photo}>
+            <Image style={styles.profilePhoto} source={require("../../assets/user.png")} />
           </View>
-          <View style={styles.quota}>
-            <Text>Address</Text>
-            <Text>{item.alamat}</Text>
+          <View style={styles.detailProfile}>
+            <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
+              <Text style={{fontWeight: 'bold'}}>Address</Text>
+              <Text>{item.alamat === '' ? '-' : item.alamat}</Text>
+            </View>
+            <View style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between', flexDirection: 'column' }}>
+              <Text style={{fontWeight: 'bold'}}>Phone</Text>
+              <Text>{item.phone}</Text>
+            </View>
           </View>
-          <Text>{item.phone}</Text>
         </View>
       </Card>
     )
   }
 
   _getUsers = async () => {
-    const discounts = await getUsers()
-    this.setState({ discounts, isLoading: false })
+    const users = await getUsers()
+    console.log('Users data', users)
+    this.setState({ users, isLoading: false })
   }
 
   componentDidMount = async () => {
@@ -94,13 +100,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  codeAndDisc: {
+  photo: {
     flex: 1,
     padding: 10,
     flexDirection: 'column',
     justifyContent: 'center'
   },
-  quota: {
+  profilePhoto: {
+    width: 60,
+    height: 60,
+    margin: 10
+  },
+  detailProfile: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center'
