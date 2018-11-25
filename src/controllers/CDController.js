@@ -9,3 +9,19 @@ export const getCD = async() => {
     console.log('Error on CD', error)
   }
 }
+
+export const addNewCD = async(name, stock, harga, genre_id) => {
+  try{
+    const addCdRes = await client.post('/cd', {
+      name,
+      stock,
+      harga,
+      genre_id
+    })
+    if(addCdRes.data){
+      return addCdRes.data
+    }
+  } catch(error){
+    console.log('Error on add CD', error)
+  }
+}

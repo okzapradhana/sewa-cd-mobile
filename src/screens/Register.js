@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, ActivityIndicator, View } from 'react-native';
 import { RkButton, RkTextInput } from 'react-native-ui-kitten'
-
+import { register } from '../controllers/UserController';
+import NavigationService from '../libs/NavigationService';
+import { Toast } from 'antd-mobile-rn/lib/button'
 
 class Register extends Component {
 
@@ -10,7 +12,8 @@ class Register extends Component {
     username: '',
     password: '',
     alamat: '',
-    noTelp: ''
+    noTelp: '',
+    isLoading: false
   }
 
   static navigationOptions = {
@@ -20,7 +23,7 @@ class Register extends Component {
     },
     headerTintColor: '#fff',
   }
-  
+
   items = [
     {
       id: 1,
@@ -34,24 +37,28 @@ class Register extends Component {
     },
     {
       id: 3,
-      key: 'username',
-      placeholder: 'Username'
-    },
-    {
-      id: 4,
       key: 'password',
       placeholder: 'Password'
     },
     {
-      id: 5,
+      id: 4,
       key: 'No Telp',
       placeholder: 'Nomor Telp'
     },
   ]
 
+  registerUser = async() => {
+    const { name, password, noTelp } = this.state
+    this.setState({isLoading: true})
+    const resRegist = await register(name, password, alamat, noTelp)
+    this.setState({isLoading: false})
+    if(resRegist.affectedRows === 1){
+      Toast.success('Login berhasil', 1, () => NavigationService.navigate('Login'))
+    }
+  }
+
   renderContent = () => {
     return this.items.map((item) => {
-      const { value } = item
       return (
         <RkTextInput
           key={item.id}
@@ -66,15 +73,26 @@ class Register extends Component {
 
   render() {
     const { navigate } = this.props.navigation
+    const { isLoading } = this.state
     return (
       <View style={styles.container}>
         <Text style={styles.title}>SEWA CD</Text>
         {this.renderContent()}
-        <RkButton
-          style={{ marginTop: 10, width: 250, backgroundColor: '#f4511e' }}
-        >
-          Register
-        </RkButton>
+        {isLoading ? (
+          <View style={styles.loadingIndicator}>
+            <ActivityIndicator
+              size="large"
+              color={color.primary}
+            />
+          </View>
+        ) : (
+          <RkButton
+              onPress={() => this.registerUser()}
+              style={{ marginTop: 10, width: 250, backgroundColor: '#f4511e' }}
+            >
+              Register
+          </RkButton>
+        )}
         <Text
           style={{ marginTop: 10 }}
           onPress={() => navigate('Login')}>
@@ -103,7 +121,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: '#f4511e'
-  }
+  },
+  loadingIndicator: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 })
 
 export default Register

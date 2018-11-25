@@ -3,19 +3,19 @@ import { View, Text, ActivityIndicator, FlatList, StyleSheet } from 'react-nativ
 import { Ionicons } from '@expo/vector-icons'
 import { color } from '../libs/metrics';
 import Card from '../components/Card';
-import { getDiscount } from '../controllers/DiskonController';
+import { getGenre } from '../controllers/GenreController'
 
-class Diskon extends Component {
+class Genre extends Component {
 
   state = {
-    discounts: [],
+    genres: [],
     refreshData: false,
     isLoading: true
   }
 
   static navigationOptions = ({ navigation }) => ({
-    title: 'Diskon',
-    drawerLabel: 'Diskon',
+    title: 'Genre',
+    drawerLabel: 'Genre',
 
     headerStyle: {
       backgroundColor: color.primary,
@@ -34,31 +34,25 @@ class Diskon extends Component {
 
   renderContent = (item) => {
     return (
-      <Card title={`Code: ${item.code}`} minHeight={150}>
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <View style={styles.codeAndDisc}>
-            <Text>{`Disc Value: ${item.discount}`}</Text>
-          </View>
-          <View style={styles.quota}>
-            <Text>Quota</Text>
-            <Text>{item.quota}</Text>
-          </View>
+      <Card title={`Id: ${item.id}`} minHeight={150}>
+        <View style={styles.genreWrapper}>
+          <Text style={styles.genreName}>{item.name}</Text>
         </View>
       </Card>
     )
   }
 
-  _getDiscount = async () => {
-    const discounts = await getDiscount()
-    this.setState({ discounts, isLoading: false })
+  _getGenre = async () => {
+    const genres = await getGenre()
+    this.setState({ genres, isLoading: false })
   }
 
   componentDidMount = async () => {
-    await this._getDiscount()
+    await this._getGenre()
   }
 
   render() {
-    const { isLoading, discounts, refreshData } = this.state
+    const { isLoading, genres, refreshData } = this.state
     return (
       <View style={styles.container}>
         {isLoading ? (
@@ -72,10 +66,10 @@ class Diskon extends Component {
             <FlatList
               contentContainerStyle={{ padding: 8 }}
               refreshing={refreshData}
-              onRefresh={() => this._getDiscount()}
-              data={discounts}
+              onRefresh={() => this._getGenre()}
+              data={genres}
               renderItem={({ item }) => this.renderContent(item)}
-              keyExtractor={item => item.code.toString()}
+              keyExtractor={item => item.id.toString()}
             />
           )}
       </View>
@@ -93,17 +87,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  codeAndDisc: {
+  genreWrapper: {
     flex: 1,
-    padding: 10,
-    flexDirection: 'column',
-    justifyContent: 'center'
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  quota: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center'
+  genreName: {
+    fontWeight: 'bold',
+    fontSize: 15
   }
 })
 
-export default Diskon
+export default Genre

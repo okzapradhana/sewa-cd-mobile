@@ -4,10 +4,14 @@ import Login from './screens/Login'
 import Diskon from './screens/Diskon'
 import Home from './screens/Home'
 import Profile from './screens/Profile';
+import Genre from './screens/Genre'
+import AddCD from './screens/AddCD'
+import Users from './screens/Users'
 import { color } from './libs/metrics';
 
 const HomeStack = createStackNavigator({
-  Home: Home
+  Home: Home,
+  AddCD: AddCD
 })
 
 const ProfileStack = createStackNavigator({
@@ -18,10 +22,16 @@ const DiskonStack = createStackNavigator({
   Diskon: Diskon
 })
 
+const GenreStack = createStackNavigator({
+  Genre: Genre
+})
+
 const HomeNavigator = createDrawerNavigator({
   Home: HomeStack,
   Diskon: DiskonStack,
-  Profile: ProfileStack
+  Genre: GenreStack,
+  Profile: ProfileStack,
+  Users: Users
 },
   {
     drawerPosition: 'left',

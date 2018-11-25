@@ -52,6 +52,7 @@ class Profile extends Component {
           <Text style={[styles.profileText, { fontWeight: 'bold' }]}>{item.name.toUpperCase()}</Text>
           <Text style={{ color: 'gray' }}>{item.alamat}</Text>
           <Image style={styles.profilePhoto} source={require("../../assets/user.png")} />
+          <Text>{item.type}</Text>
           <Text style={styles.profileText}>{item.phone}</Text>
         </View>
       </Card>

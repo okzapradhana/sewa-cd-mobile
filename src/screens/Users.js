@@ -3,19 +3,19 @@ import { View, Text, ActivityIndicator, FlatList, StyleSheet } from 'react-nativ
 import { Ionicons } from '@expo/vector-icons'
 import { color } from '../libs/metrics';
 import Card from '../components/Card';
-import { getDiscount } from '../controllers/DiskonController';
+import { getUsers } from '../controllers/UsersController';
 
-class Diskon extends Component {
+class Users extends Component {
 
   state = {
-    discounts: [],
+    users: [],
     refreshData: false,
     isLoading: true
   }
 
   static navigationOptions = ({ navigation }) => ({
-    title: 'Diskon',
-    drawerLabel: 'Diskon',
+    title: 'Users',
+    drawerLabel: 'Users',
 
     headerStyle: {
       backgroundColor: color.primary,
@@ -34,31 +34,32 @@ class Diskon extends Component {
 
   renderContent = (item) => {
     return (
-      <Card title={`Code: ${item.code}`} minHeight={150}>
+      <Card title={item.name} minHeight={150}>
         <View style={{ display: 'flex', flexDirection: 'row' }}>
           <View style={styles.codeAndDisc}>
-            <Text>{`Disc Value: ${item.discount}`}</Text>
+            <Text>{`Name: ${item.name}`}</Text>
           </View>
           <View style={styles.quota}>
-            <Text>Quota</Text>
-            <Text>{item.quota}</Text>
+            <Text>Address</Text>
+            <Text>{item.alamat}</Text>
           </View>
+          <Text>{item.phone}</Text>
         </View>
       </Card>
     )
   }
 
-  _getDiscount = async () => {
-    const discounts = await getDiscount()
+  _getUsers = async () => {
+    const discounts = await getUsers()
     this.setState({ discounts, isLoading: false })
   }
 
   componentDidMount = async () => {
-    await this._getDiscount()
+    await this._getUsers()
   }
 
   render() {
-    const { isLoading, discounts, refreshData } = this.state
+    const { isLoading, users, refreshData } = this.state
     return (
       <View style={styles.container}>
         {isLoading ? (
@@ -72,10 +73,10 @@ class Diskon extends Component {
             <FlatList
               contentContainerStyle={{ padding: 8 }}
               refreshing={refreshData}
-              onRefresh={() => this._getDiscount()}
-              data={discounts}
+              onRefresh={() => this._getUsers()}
+              data={users}
               renderItem={({ item }) => this.renderContent(item)}
-              keyExtractor={item => item.code.toString()}
+              keyExtractor={item => item.id.toString()}
             />
           )}
       </View>
@@ -106,4 +107,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Diskon
+export default Users

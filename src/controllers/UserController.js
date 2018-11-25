@@ -26,6 +26,11 @@ export const register = async (name, password, alamat, phone) => {
       phone
     })
     console.log(registerRes.data)
+    if(registerRes.data.affectedRows > 0){
+      return registerRes.data
+    } else{
+      return { error: 'register failed' }
+    }
   } catch(error){
     console.log('Error on Register', error)
     return { error: error.response.data }

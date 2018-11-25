@@ -4,6 +4,9 @@ import { Ionicons } from '@expo/vector-icons'
 import { getCD } from '../controllers/CDController';
 import Card from '../components/Card';
 import { color } from '../libs/metrics';
+import FloatingButton from '../components/FloatingButton'
+import NavigationService from '../libs/NavigationService';
+import Toast from 'antd-mobile-rn/lib/toast'
 
 class Home extends Component {
 
@@ -42,13 +45,13 @@ class Home extends Component {
     this.setState({ allCd: allCd, isLoading: false })
   }
 
-  _onPress = () => {
-    console.log('Clicked card')
+  _onPressFloatingButton = () => {
+    NavigationService.navigate('AddCD')
   }
 
   renderContent = (item) => {
     return (
-      <Card onPress = {this._onPress} minHeight={100} title={item.name}>
+      <Card minHeight={100} title={item.name}>
         <View style={styles.cardContent}>
           <Text>{`Price: Rp. ${item.harga}`}</Text>
           <Text>{`Stock: ${item.stock}`}</Text>
@@ -71,16 +74,19 @@ class Home extends Component {
           </View>
         ) :
           (
-            <FlatList
-              contentContainerStyle={{padding: 8}}
-              refreshing={this.state.refreshData}
-              onRefresh={() => this.getCDList()}
-              data={allCd}
-              renderItem={({ item }) => this.renderContent(item)}
-              keyExtractor={item => item.id.toString()}
-            />
+            <View>
+              <FlatList
+                contentContainerStyle={{ padding: 8 }}
+                refreshing={this.state.refreshData}
+                onRefresh={() => this.getCDList()}
+                data={allCd}
+                renderItem={({ item }) => this.renderContent(item)}
+                keyExtractor={item => item.id.toString()}
+              />
+            </View>
           )
         }
+        <FloatingButton onPress={() => this._onPressFloatingButton()} />
       </View>
     )
   }
@@ -96,7 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  cardContent:{
+  cardContent: {
     flexDirection: 'row',
     justifyContent: 'space-around',
   }
