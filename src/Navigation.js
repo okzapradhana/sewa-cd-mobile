@@ -1,4 +1,4 @@
-import { createDrawerNavigator, createSwitchNavigator, createAppContainer, createStackNavigator  } from 'react-navigation'
+import { createDrawerNavigator, createSwitchNavigator, createAppContainer, createStackNavigator } from 'react-navigation'
 import { color } from './libs/metrics';
 import Register from './screens/Register'
 import Login from './screens/Login'
@@ -11,6 +11,8 @@ import Users from './screens/Users'
 import AddDiskon from './screens/AddDiskon'
 import AddGenre from './screens/AddGenre';
 import Penyewaan from './screens/Penyewaan';
+import { AsyncStorage } from 'react-native'
+import {observer} from 'mobx-react'
 
 const HomeStack = createStackNavigator({
   Home: Home,
@@ -39,29 +41,52 @@ const PenyewaanStack = createStackNavigator({
   Penyewaan: Penyewaan
 })
 
-const HomeNavigator = createDrawerNavigator({
-  Home: HomeStack,
-  Diskon: DiskonStack,
-  Genre: GenreStack,
-  Users: UsersStack,
-  Profile: ProfileStack,
-  Penyewaan: PenyewaanStack
-},
+const HomeNavigatorAdmin = createDrawerNavigator(
+    {
+      Home: HomeStack,
+      Diskon: DiskonStack,
+      Genre: GenreStack,
+      Users: UsersStack,
+      Profile: ProfileStack,
+      Penyewaan: PenyewaanStack
+    }          
+  ,
   {
     drawerPosition: 'left',
     initialRouteName: 'Home',
     drawerBackgroundColor: '#f4511e',
-    contentOptions:{
+    contentOptions: {
       activeTintColor: color.white,
       inactiveTintColor: color.whiteTransparency
     }
   }
 )
 
+const HomeNavigatorUser = createDrawerNavigator(
+  {
+    Home: HomeStack,
+    Diskon: DiskonStack,
+    Genre: GenreStack,
+    Profile: ProfileStack,
+    Penyewaan: PenyewaanStack
+  }         
+,
+{
+  drawerPosition: 'left',
+  initialRouteName: 'Home',
+  drawerBackgroundColor: '#f4511e',
+  contentOptions: {
+    activeTintColor: color.white,
+    inactiveTintColor: color.whiteTransparency
+  }
+}
+)
+
 const AppNavigator = createSwitchNavigator({
   Login: { screen: Login },
   Register: { screen: Register },
-  Home: { screen: HomeNavigator }
+  HomeAdmin: { screen:  HomeNavigatorAdmin },
+  HomeUser: {screen: HomeNavigatorUser}
 })
 
-export default createAppContainer(AppNavigator)
+export default observer(createAppContainer(AppNavigator))

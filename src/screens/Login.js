@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, AsyncStorage } from 'react-native';
 import { RkButton, RkTextInput } from 'react-native-ui-kitten'
 import NavigationService from '../libs/NavigationService';
 import { login } from '../controllers/UserController';
 import { readLocalAuthToken } from '../libs/api';
 import { color } from '../libs/metrics';
 import Toast from 'antd-mobile-rn/lib/toast'
+import User from '../model/User';
+import {observer} from 'mobx-react'
 
 class Login extends Component {
 
@@ -26,7 +28,9 @@ class Login extends Component {
   componentDidMount = async () => {
     const token = await readLocalAuthToken()
     if (token) {
-      NavigationService.navigate('Home')
+      const type = await AsyncStorage.getItem('type')
+      User.setType(type)
+      NavigationService.navigate(type === 'admin' ? 'HomeAdmin' : 'HomeUser')
     }
   }
 
@@ -37,7 +41,7 @@ class Login extends Component {
     this.setState({ isLoading: false })
     if (res.error === '') {
       Toast.success('Berhasil Login', 2)
-      NavigationService.navigate('Home')
+      NavigationService.navigate(User.type === 'admin' ? 'HomeAdmin' : 'HomeUser')
     }
   }
 
@@ -115,4 +119,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Login
+export default observer(Login)

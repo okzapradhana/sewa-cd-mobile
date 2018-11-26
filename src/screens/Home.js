@@ -5,6 +5,7 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
+  AsyncStorage
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { getCD } from '../controllers/CDController';
@@ -15,6 +16,8 @@ import FloatingButton from '../components/FloatingButton';
 import NavigationService from '../libs/NavigationService';
 import Toast from 'antd-mobile-rn/lib/toast';
 import { Button } from 'antd-mobile-rn';
+import User from '../model/User';
+import {observer} from 'mobx-react'
 
 class Home extends Component {
   state = {
@@ -46,7 +49,7 @@ class Home extends Component {
 
   componentDidMount = async () => {
     await this.getCDList();
-    this.getCurrenUser();
+    this.getCurrentUser();
   };
 
   getCDList = async () => {
@@ -55,11 +58,10 @@ class Home extends Component {
     this.setState({ allCd: allCd, isLoading: false });
   };
 
-  getCurrenUser = async() => {
+  getCurrentUser = async () => {
     const user = await getProfile()
-    console.log('Id user' , user[0].id)
-    this.setState({user_id: user[0].id})
-
+    console.log('Id user', user[0].id)
+    this.setState({ user_id: user[0].id })
   }
 
   _onPressFloatingButton = () => {
@@ -91,6 +93,7 @@ class Home extends Component {
   };
 
   render() {
+    console.log('USER', User.type)
     const { allCd, isLoading } = this.state;
     return (
       <View style={styles.container}>
@@ -99,18 +102,20 @@ class Home extends Component {
             <ActivityIndicator size="large" color={color.primary} />
           </View>
         ) : (
-          <View>
-            <FlatList
-              contentContainerStyle={{ padding: 8 }}
-              refreshing={this.state.refreshData}
-              onRefresh={() => this.getCDList()}
-              data={allCd}
-              renderItem={({ item }) => this.renderContent(item)}
-              keyExtractor={item => item.id.toString()}
-            />
-          </View>
-        )}
-        <FloatingButton onPress={() => this._onPressFloatingButton()} />
+            <View>
+              <FlatList
+                contentContainerStyle={{ padding: 8 }}
+                refreshing={this.state.refreshData}
+                onRefresh={() => this.getCDList()}
+                data={allCd}
+                renderItem={({ item }) => this.renderContent(item)}
+                keyExtractor={item => item.id.toString()}
+              />
+            </View>
+          )}
+        {User.type === 'admin' &&
+          <FloatingButton onPress={() => this._onPressFloatingButton()} />
+        }
       </View>
     );
   }
@@ -136,4 +141,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home;
+export default observer(Home);
