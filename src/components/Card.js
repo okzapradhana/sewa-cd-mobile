@@ -6,6 +6,7 @@ import { color } from '../libs/metrics';
   Props: 
   title: String
   minHeight: number
+  extraContent: void
   onPress: void
 */
 

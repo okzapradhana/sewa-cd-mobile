@@ -7,6 +7,8 @@ import { getDiscount } from '../controllers/DiskonController';
 import NavigationService from '../libs/NavigationService';
 import FloatingButton from '../components/FloatingButton';
 import { Button } from 'antd-mobile-rn'
+import { observer } from 'mobx-react';
+import User from '../model/User';
 
 class Diskon extends Component {
 
@@ -100,7 +102,7 @@ class Diskon extends Component {
               keyExtractor={item => item.code.toString()}
             />
           )}
-        {AsyncStorage.getItem('type') === 'admin' &&
+        {User.type === 'admin' &&
           <FloatingButton onPress={() => this._onPressFloatingButton()} />
         }
       </View>
@@ -135,4 +137,4 @@ const styles = StyleSheet.create({
       }
     })
     
-export default Diskon
+export default observer(Diskon)

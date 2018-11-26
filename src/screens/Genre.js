@@ -6,6 +6,8 @@ import Card from '../components/Card';
 import { getGenre } from '../controllers/GenreController'
 import FloatingButton from '../components/FloatingButton'
 import NavigationService from '../libs/NavigationService';
+import { observer } from 'mobx-react';
+import User from '../model/User';
 
 class Genre extends Component {
 
@@ -78,7 +80,7 @@ class Genre extends Component {
               keyExtractor={item => item.id.toString()}
             />
           )}
-        {AsyncStorage.getItem('type') === 'admin' &&
+        {User.type === 'admin' &&
           <FloatingButton onPress={() => this._onPressFloatingButton()} />
         }
       </View>
@@ -108,4 +110,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Genre
+export default observer(Genre)
