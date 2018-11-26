@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, ActivityIndicator, FlatList, StyleSheet } from 'react-native'
+import { View, Text, ActivityIndicator, FlatList, StyleSheet, Clipboard } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { color } from '../libs/metrics';
 import Card from '../components/Card';
 import { getDiscount } from '../controllers/DiskonController';
 import NavigationService from '../libs/NavigationService';
 import FloatingButton from '../components/FloatingButton';
+import { Button } from 'antd-mobile-rn'
 
 class Diskon extends Component {
 
@@ -33,10 +34,25 @@ class Diskon extends Component {
       </View>,
     headerTintColor: color.white,
   })
+  
+  _copyCode = async(code) =>{
+    await Clipboard.setString(code)
+    alert('Copied to Clipboard!')
+  }
 
   renderContent = (item) => {
     return (
-      <Card title={`Code: ${item.code}`} minHeight={150}>
+      <Card 
+        title={`Code: ${item.code}`} 
+        minHeight={150}
+        extraContent={
+          <View style={{ flexDirection: 'row', padding: 8 }}>
+            <Button onClick={() => this._copyCode(item.code)} style={styles.buttonStyle}>
+              <Text style={{ color: 'white' }}>Copy Code</Text>
+            </Button>
+          </View>
+        }
+        >
         <View style={{ display: 'flex', flexDirection: 'row' }}>
           <View style={styles.codeAndDisc}>
             <Text>{`Disc Value: ${item.discount}`}</Text>
@@ -110,6 +126,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center'
+  },
+  buttonStyle: {
+    flex: 1,
+    backgroundColor: 'black'
   }
 })
 
