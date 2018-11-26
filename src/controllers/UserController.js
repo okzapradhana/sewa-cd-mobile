@@ -20,7 +20,7 @@ export const login = async (name, password) => {
 export const register = async (name, password, alamat, phone) => {
   try{
     const registerRes = await client.post('/register', {
-      name,
+      name: name,
       password,
       alamat,
       phone
@@ -46,7 +46,9 @@ export const getProfile = async () => {
   try{
     const profileRes = await client.get('/profil')
     console.log(profileRes.data)
-    return profileRes.data
+    if(profileRes.data){
+      return profileRes.data
+    }
   } catch(error){
     console.log('Error on Get Profile', error.response.data)
   }

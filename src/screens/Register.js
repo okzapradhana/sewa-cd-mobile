@@ -47,12 +47,19 @@ class Register extends Component {
     },
   ]
 
-  registerUser = async() => {
+  registerUser = async () => {
     const { name, password, noTelp } = this.state
-    this.setState({isLoading: true})
-    const resRegist = await register(name, password, alamat, noTelp)
-    this.setState({isLoading: false})
-    if(resRegist.affectedRows === 1){
+    
+    /*Check each value*/
+    const nameCheck = name === null | undefined ? '' : name
+    const passwordCheck = password === null | undefined ? '' : alamat
+    const alamatCheck = alamat === null | undefined ? '' : password
+    const noTelpCheck = noTelp === null | undefined ? 0 : noTelp
+
+    this.setState({ isLoading: true })
+    const resRegist = await register(nameCheck, passwordCheck, alamatCheck, noTelpCheck)
+    this.setState({ isLoading: false })
+    if (resRegist.affectedRows === 1) {
       Toast.success('Login berhasil', 1, () => NavigationService.navigate('Login'))
     }
   }
@@ -86,13 +93,13 @@ class Register extends Component {
             />
           </View>
         ) : (
-          <RkButton
+            <RkButton
               onPress={() => this.registerUser()}
               style={{ marginTop: 10, width: 250, backgroundColor: '#f4511e' }}
             >
               Register
           </RkButton>
-        )}
+          )}
         <Text
           style={{ marginTop: 10 }}
           onPress={() => navigate('Login')}>

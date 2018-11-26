@@ -24,5 +24,22 @@ export const addNewDiscount = async(code, quota, discount) => {
     }
   } catch(error){
     console.log('Error on add Disc', error)
+    return { error: error.response.data.status }
+  }
+}
+
+export const updateDiscount = async(code, quota, discount) => {
+  try{
+    const updateDiscRes = await client.put(`/discount/${code}`, {
+      code,
+      quota,
+      discount
+    })
+    if(updateDiscRes.data){
+      return updateDiscRes.data
+    }
+  } catch(error){
+    console.log('Error on Update Disc', error)
+    return { error: error.response.data.status }
   }
 }

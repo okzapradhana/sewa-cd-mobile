@@ -4,6 +4,8 @@ import { Ionicons } from '@expo/vector-icons'
 import { color } from '../libs/metrics';
 import Card from '../components/Card';
 import { getGenre } from '../controllers/GenreController'
+import FloatingButton from '../components/FloatingButton'
+import NavigationService from '../libs/NavigationService';
 
 class Genre extends Component {
 
@@ -47,6 +49,10 @@ class Genre extends Component {
     this.setState({ genres, isLoading: false })
   }
 
+  _onPressFloatingButton = () => {
+    NavigationService.navigate('AddGenre');
+  };
+
   componentDidMount = async () => {
     await this._getGenre()
   }
@@ -72,6 +78,7 @@ class Genre extends Component {
               keyExtractor={item => item.id.toString()}
             />
           )}
+        <FloatingButton onPress={() => this._onPressFloatingButton()} />
       </View>
     )
   }

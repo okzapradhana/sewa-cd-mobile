@@ -4,30 +4,26 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { getCD } from '../controllers/CDController';
-import { getProfile } from '../controllers/UserController'
 import Card from '../components/Card';
 import { color } from '../libs/metrics';
 import FloatingButton from '../components/FloatingButton';
 import NavigationService from '../libs/NavigationService';
-import Toast from 'antd-mobile-rn/lib/toast';
 import { Button } from 'antd-mobile-rn';
-import { RkButton } from 'react-native-ui-kitten';
+import { getPenyewaan } from '../controllers/PenyewaanController';
 
-class Home extends Component {
+class Penyewaan extends Component {
   state = {
-    user_id: '',
-    allCd: [],
+    allSewa: [],
     refreshData: false,
     isLoading: true
   };
 
   static navigationOptions = ({ navigation }) => ({
-    title: 'Home',
-    drawerLabel: 'Home',
+    title: 'Penyewaan',
+    drawerLabel: 'Penyewaan',
 
     headerStyle: {
       backgroundColor: color.primary
@@ -46,35 +42,13 @@ class Home extends Component {
   });
 
   componentDidMount = async () => {
-    await this.getCDList();
-    this.getCurrenUser();
+    await this.getSewaList();
   };
 
-  getCDList = async () => {
-    const allCd = await getCD();
-    console.log('Fetch CD List');
-    this.setState({ allCd: allCd, isLoading: false });
-  };
-
-<<<<<<< HEAD
-  addtoCart = async () => {
-    Toast.success('Berhasil tambah cart', 2);
-  };
-
-  addtoPeminjaman = async () => {
-    Toast.success('Berhasil tambah Peminjaman', 2);
-  };
-=======
-  getCurrenUser = async() => {
-    const user = await getProfile()
-    console.log('Id user' , user[0].id)
-    this.setState({user_id: user[0].id})
-
-  }
->>>>>>> c4a410224c2c916c9a4aee3bfed03622a672b7a0
-
-  _onPressFloatingButton = () => {
-    NavigationService.navigate('AddCD');
+  getSewaList = async () => {
+    const allSewa = await getPenyewaan();
+    console.log('Fetch Sewa List');
+    this.setState({ allSewa: allSewa, isLoading: false });
   };
 
   renderContent = item => {
@@ -84,12 +58,12 @@ class Home extends Component {
         title={item.name}
         extraContent={
           <View style={{ flexDirection: 'row', padding: 8 }}>
-            <RkButton rkType="primary" onClick={this.addtoCart}>
+            <Button style={styles.buttonStyle}>
               <Text style={{ color: 'white' }}>Buy</Text>
-            </RkButton>
-            <RkButton rkType="warning">
+            </Button>
+            <Button style={styles.buttonStyle}>
               <Text style={{ color: 'white' }}>Rent</Text>
-            </RkButton>
+            </Button>
           </View>
         }
       >
@@ -102,7 +76,7 @@ class Home extends Component {
   };
 
   render() {
-    const { allCd, isLoading } = this.state;
+    const { allSewa, isLoading } = this.state;
     return (
       <View style={styles.container}>
         {isLoading ? (
@@ -114,14 +88,13 @@ class Home extends Component {
             <FlatList
               contentContainerStyle={{ padding: 8 }}
               refreshing={this.state.refreshData}
-              onRefresh={() => this.getCDList()}
-              data={allCd}
+              onRefresh={() => this.getSewaList()}
+              data={allSewa}
               renderItem={({ item }) => this.renderContent(item)}
-              keyExtractor={item => item.id && item.id.toString()}
+              keyExtractor={item => item.id.toString()}
             />
           </View>
         )}
-        <FloatingButton onPress={() => this._onPressFloatingButton()} />
       </View>
     );
   }
@@ -140,13 +113,11 @@ const styles = StyleSheet.create({
   cardContent: {
     flexDirection: 'row',
     justifyContent: 'space-around'
+  },
+  buttonStyle: {
+    flex: 1,
+    backgroundColor: 'black'
   }
-  // buttonStyle1: {
-  //   flex: 1
-  // },
-  // buttonStyle2: {
-  //   flex: 1
-  // }
 });
 
-export default Home;
+export default Penyewaan;

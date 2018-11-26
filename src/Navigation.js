@@ -1,4 +1,5 @@
 import { createDrawerNavigator, createSwitchNavigator, createAppContainer, createStackNavigator  } from 'react-navigation'
+import { color } from './libs/metrics';
 import Register from './screens/Register'
 import Login from './screens/Login'
 import Diskon from './screens/Diskon'
@@ -7,7 +8,9 @@ import Profile from './screens/Profile';
 import Genre from './screens/Genre'
 import AddCD from './screens/AddCD'
 import Users from './screens/Users'
-import { color } from './libs/metrics';
+import AddDiskon from './screens/AddDiskon'
+import AddGenre from './screens/AddGenre';
+import Penyewaan from './screens/Penyewaan';
 
 const HomeStack = createStackNavigator({
   Home: Home,
@@ -19,23 +22,30 @@ const ProfileStack = createStackNavigator({
 })
 
 const DiskonStack = createStackNavigator({
-  Diskon: Diskon
+  Diskon: Diskon,
+  AddDiskon: AddDiskon
 })
 
 const GenreStack = createStackNavigator({
-  Genre: Genre
+  Genre: Genre,
+  AddGenre: AddGenre
 })
 
 const UsersStack = createStackNavigator({
   Users: Users
 })
 
+const PenyewaanStack = createStackNavigator({
+  Penyewaan: Penyewaan
+})
+
 const HomeNavigator = createDrawerNavigator({
   Home: HomeStack,
   Diskon: DiskonStack,
   Genre: GenreStack,
+  Users: UsersStack,
   Profile: ProfileStack,
-  Users: UsersStack
+  Penyewaan: PenyewaanStack
 },
   {
     drawerPosition: 'left',
