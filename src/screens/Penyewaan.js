@@ -7,24 +7,23 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { getCD } from '../controllers/CDController';
 import Card from '../components/Card';
 import { color } from '../libs/metrics';
 import FloatingButton from '../components/FloatingButton';
 import NavigationService from '../libs/NavigationService';
-import Toast from 'antd-mobile-rn/lib/toast';
 import { Button } from 'antd-mobile-rn';
+import { getPenyewaan } from '../controllers/PenyewaanController';
 
-class Home extends Component {
+class Penyewaan extends Component {
   state = {
-    allCd: [],
+    allSewa: [],
     refreshData: false,
     isLoading: true
   };
 
   static navigationOptions = ({ navigation }) => ({
-    title: 'Home',
-    drawerLabel: 'Home',
+    title: 'Penyewaan',
+    drawerLabel: 'Penyewaan',
 
     headerStyle: {
       backgroundColor: color.primary
@@ -43,17 +42,13 @@ class Home extends Component {
   });
 
   componentDidMount = async () => {
-    await this.getCDList();
+    await this.getSewaList();
   };
 
-  getCDList = async () => {
-    const allCd = await getCD();
-    console.log('Fetch CD List');
-    this.setState({ allCd: allCd, isLoading: false });
-  };
-
-  _onPressFloatingButton = () => {
-    NavigationService.navigate('AddCD');
+  getSewaList = async () => {
+    const allSewa = await getPenyewaan();
+    console.log('Fetch Sewa List');
+    this.setState({ allSewa: allSewa, isLoading: false });
   };
 
   renderContent = item => {
@@ -81,7 +76,7 @@ class Home extends Component {
   };
 
   render() {
-    const { allCd, isLoading } = this.state;
+    const { allSewa, isLoading } = this.state;
     return (
       <View style={styles.container}>
         {isLoading ? (
@@ -93,14 +88,13 @@ class Home extends Component {
             <FlatList
               contentContainerStyle={{ padding: 8 }}
               refreshing={this.state.refreshData}
-              onRefresh={() => this.getCDList()}
-              data={allCd}
+              onRefresh={() => this.getSewaList()}
+              data={allSewa}
               renderItem={({ item }) => this.renderContent(item)}
               keyExtractor={item => item.id.toString()}
             />
           </View>
         )}
-        <FloatingButton onPress={() => this._onPressFloatingButton()} />
       </View>
     );
   }
@@ -126,4 +120,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home;
+export default Penyewaan;

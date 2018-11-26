@@ -4,6 +4,8 @@ import { Ionicons } from '@expo/vector-icons'
 import { color } from '../libs/metrics';
 import Card from '../components/Card';
 import { getDiscount } from '../controllers/DiskonController';
+import NavigationService from '../libs/NavigationService';
+import FloatingButton from '../components/FloatingButton';
 
 class Diskon extends Component {
 
@@ -53,6 +55,10 @@ class Diskon extends Component {
     this.setState({ discounts, isLoading: false })
   }
 
+  _onPressFloatingButton = () => {
+    NavigationService.navigate('AddDiskon');
+  };
+
   componentDidMount = async () => {
     await this._getDiscount()
   }
@@ -78,6 +84,7 @@ class Diskon extends Component {
               keyExtractor={item => item.code.toString()}
             />
           )}
+        <FloatingButton onPress={() => this._onPressFloatingButton()} />
       </View>
     )
   }

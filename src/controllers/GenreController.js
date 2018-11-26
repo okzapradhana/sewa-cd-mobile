@@ -11,3 +11,16 @@ export const getGenre = async () => {
     console.log('Error on Get Genre', error)
   }
 }
+
+export const addNewGenre = async (name) => {
+  try{
+    const addGenreRes = await client.post('/genre',{
+      name
+    })
+    if(addGenreRes.data){
+      return addGenreRes.data
+    }
+  } catch(error) {
+    console.log('Error on Add Genre' , error)
+  }
+}

@@ -20,7 +20,7 @@ export const login = async (name, password) => {
 export const register = async (name, password, alamat, phone) => {
   try{
     const registerRes = await client.post('/register', {
-      name,
+      name: name,
       password,
       alamat,
       phone
