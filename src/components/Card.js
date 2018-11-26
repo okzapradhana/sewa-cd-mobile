@@ -17,11 +17,14 @@ class Card extends Component {
   render() {
     return (
       <TouchableWithoutFeedback
-        onPress={() => {
-          this.props.extraContent
-            ? this.setState(prev => ({ expanded: !prev.expanded }))
-            : this.props.onPress();
-        }}
+        onPress={
+          this.props.clickable &&
+          (() => {
+            this.props.extraContent
+              ? this.setState(prev => ({ expanded: !prev.expanded }))
+              : this.props.onPress();
+          })
+        }
       >
         <View style={styles.container}>
           <View
