@@ -34,8 +34,8 @@ const HomeNavigator = createDrawerNavigator({
   Home: HomeStack,
   Diskon: DiskonStack,
   Genre: GenreStack,
+  Users: UsersStack,
   Profile: ProfileStack,
-  Users: UsersStack
 },
   {
     drawerPosition: 'left',
