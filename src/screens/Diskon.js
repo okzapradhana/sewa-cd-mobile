@@ -34,16 +34,16 @@ class Diskon extends Component {
       </View>,
     headerTintColor: color.white,
   })
-  
-  _copyCode = async(code) =>{
+
+  _copyCode = async (code) => {
     await Clipboard.setString(code)
     alert('Copied to Clipboard!')
   }
 
   renderContent = (item) => {
     return (
-      <Card 
-        title={`Code: ${item.code}`} 
+      <Card
+        title={`Code: ${item.code}`}
         minHeight={150}
         extraContent={
           <View style={{ flexDirection: 'row', padding: 8 }}>
@@ -52,7 +52,7 @@ class Diskon extends Component {
             </Button>
           </View>
         }
-        >
+      >
         <View style={{ display: 'flex', flexDirection: 'row' }}>
           <View style={styles.codeAndDisc}>
             <Text>{`Disc Value: ${item.discount}`}</Text>
@@ -100,37 +100,39 @@ class Diskon extends Component {
               keyExtractor={item => item.code.toString()}
             />
           )}
-        <FloatingButton onPress={() => this._onPressFloatingButton()} />
+        {AsyncStorage.getItem('type') === 'admin' &&
+          <FloatingButton onPress={() => this._onPressFloatingButton()} />
+        }
       </View>
-    )
+      )
+    }
   }
-}
-
+  
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-  },
+          container: {
+          flex: 1,
+        padding: 10,
+      },
   loadingIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+          flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
   codeAndDisc: {
-    flex: 1,
-    padding: 10,
-    flexDirection: 'column',
-    justifyContent: 'center'
-  },
+          flex: 1,
+        padding: 10,
+        flexDirection: 'column',
+        justifyContent: 'center'
+      },
   quota: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center'
-  },
+          flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center'
+      },
   buttonStyle: {
-    flex: 1,
-    backgroundColor: 'black'
-  }
-})
-
+          flex: 1,
+        backgroundColor: 'black'
+      }
+    })
+    
 export default Diskon

@@ -52,10 +52,10 @@ class AddDiskon extends Component {
           clear
           style={styles.input}
           value={code}
-          onChange={(value) => this.setState({ name: value })}
+          onChange={(value) => this.setState({ code: value })}
           placeholder="Code"
         >
-          CD Name
+          Code
         </InputItem>
         <InputItem
           clear
@@ -65,7 +65,7 @@ class AddDiskon extends Component {
           onChange={(value) => this.setState({ quota: value })}
           placeholder="Quota"
         >
-          Stock
+          Quota
         </InputItem>
         <InputItem
           clear
@@ -75,7 +75,7 @@ class AddDiskon extends Component {
           onChange={(value) => this.setState({ discount: value })}
           placeholder="Discount"
         >
-          Price
+          Discount
         </InputItem>
 
         {!isLoadingSubmit ? (

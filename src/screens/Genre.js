@@ -78,7 +78,9 @@ class Genre extends Component {
               keyExtractor={item => item.id.toString()}
             />
           )}
-        <FloatingButton onPress={() => this._onPressFloatingButton()} />
+        {AsyncStorage.getItem('type') === 'admin' &&
+          <FloatingButton onPress={() => this._onPressFloatingButton()} />
+        }
       </View>
     )
   }

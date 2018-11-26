@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
+  AsyncStorage
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { getCD } from '../controllers/CDController';
@@ -19,6 +20,8 @@ import { RkButton } from 'react-native-ui-kitten';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { addPenyewaan } from '../controllers/PenyewaanController';
 import moment from 'moment';
+import User from '../model/User';
+import { observer } from 'mobx-react';
 
 class Home extends Component {
   state = {
@@ -57,7 +60,7 @@ class Home extends Component {
 
   componentDidMount = async () => {
     await this.getCDList();
-    this.getCurrenUser();
+    this.getCurrentUser();
   };
 
   getCDList = async () => {
@@ -66,7 +69,7 @@ class Home extends Component {
     this.setState({ allCd: allCd, isLoading: false });
   };
 
-  getCurrenUser = async () => {
+  getCurrentUser = async () => {
     const user = await getProfile();
     console.log('Id user', user[0].id);
     this.setState({ user_id: user[0].id });
@@ -105,7 +108,7 @@ class Home extends Component {
       <Card
         clickable
         minHeight={100}
-        title={item.name}
+        title={`${item.name}`}
         extraContent={
           <View style={{ flexDirection: 'row', padding: 8 }}>
             <RkButton
@@ -127,6 +130,7 @@ class Home extends Component {
   };
 
   render() {
+    console.log('USER', User.type);
     const { allCd, isLoading } = this.state;
     return (
       <View style={styles.container}>
@@ -195,6 +199,9 @@ class Home extends Component {
             onCancel={this._hideDateTimePicker}
           />
         </Modal>
+        {User.type === 'admin' && (
+          <FloatingButton onPress={() => this._onPressFloatingButton()} />
+        )}
       </View>
     );
   }
@@ -217,9 +224,6 @@ const styles = StyleSheet.create({
   buttonStyle1: {
     flex: 1
   }
-  // buttonStyle2: {
-  //   flex: 1
-  // }
 });
 
-export default Home;
+export default observer(Home);

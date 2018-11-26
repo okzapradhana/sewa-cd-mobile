@@ -1,5 +1,6 @@
 import { AsyncStorage } from 'react-native'
 import { client } from '../libs/api'
+import User from '../model/User';
 
 export const login = async (name, password) => {
   try{
@@ -8,7 +9,10 @@ export const login = async (name, password) => {
       password
     })
     console.log(loginRes.data)
-    AsyncStorage.setItem('token', loginRes.data.token)
+    await AsyncStorage.setItem('token', loginRes.data.token)
+    await AsyncStorage.setItem('type', loginRes.data.type)
+    User.setType(loginRes.data.type)
+    console.log('Storage' , await AsyncStorage.getItem('type'))
     client.defaults.headers.common['Authorization'] = `Bearer ${loginRes.data.token}`
     return { error: '' }
   } catch(error){
