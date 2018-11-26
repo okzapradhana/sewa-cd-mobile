@@ -16,6 +16,7 @@ import FloatingButton from '../components/FloatingButton';
 import NavigationService from '../libs/NavigationService';
 import Toast from 'antd-mobile-rn/lib/toast';
 import { Button } from 'antd-mobile-rn';
+import { RkButton } from 'react-native-ui-kitten';
 
 class Home extends Component {
   state = {
@@ -58,6 +59,10 @@ class Home extends Component {
     Toast.success('Berhasil tambah cart', 2);
   };
 
+  addtoPeminjaman = async () => {
+    Toast.success('Berhasil tambah Peminjaman', 2);
+  };
+
   _onPressFloatingButton = () => {
     NavigationService.navigate('AddCD');
   };
@@ -69,12 +74,12 @@ class Home extends Component {
         title={item.name}
         extraContent={
           <View style={{ flexDirection: 'row', padding: 8 }}>
-            <Button style={styles.buttonStyle} onClick={this.addtoCart}>
+            <RkButton rkType="primary" onClick={this.addtoCart}>
               <Text style={{ color: 'white' }}>Buy</Text>
-            </Button>
-            <Button style={styles.buttonStyle}>
+            </RkButton>
+            <RkButton rkType="warning">
               <Text style={{ color: 'white' }}>Rent</Text>
-            </Button>
+            </RkButton>
           </View>
         }
       >
@@ -125,11 +130,13 @@ const styles = StyleSheet.create({
   cardContent: {
     flexDirection: 'row',
     justifyContent: 'space-around'
-  },
-  buttonStyle: {
-    flex: 1,
-    backgroundColor: 'black'
   }
+  // buttonStyle1: {
+  //   flex: 1
+  // },
+  // buttonStyle2: {
+  //   flex: 1
+  // }
 });
 
 export default Home;
