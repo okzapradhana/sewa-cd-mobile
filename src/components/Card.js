@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native'
-import { color } from '../libs/metrics'
+import React, { Component } from 'react';
+import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
+import { color } from '../libs/metrics';
 
 /*Card Component
   Props: 
@@ -9,33 +9,57 @@ import { color } from '../libs/metrics'
   onPress: void
 */
 
-
 class Card extends Component {
-
+  state = {
+    expanded: false
+  };
   render() {
     return (
-      <TouchableWithoutFeedback onPress={this.props.onPress}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          this.props.extraContent
+            ? this.setState(prev => ({ expanded: !prev.expanded }))
+            : this.props.onPress();
+        }}
+      >
         <View style={styles.container}>
-          <View style={[styles.wrapper, this.props.minHeight ? { minHeight: this.props.minHeight } : { minHeight: 200 }]}>
-            {this.props.title &&
+          <View
+            style={[
+              styles.wrapper,
+              this.props.minHeight
+                ? { minHeight: this.props.minHeight }
+                : { minHeight: 200 }
+            ]}
+          >
+            {this.props.title && (
               <View style={styles.title}>
                 <Text style={styles.textTitle}>{this.props.title}</Text>
               </View>
-            }
-            <View style={styles.content}>
-              {this.props.children}
-            </View>
+            )}
+            <View style={styles.content}>{this.props.children}</View>
+            {this.state.expanded && (
+              <View style={styles.extraContentContainer}>
+                {this.props.extraContent}
+              </View>
+            )}
           </View>
         </View>
       </TouchableWithoutFeedback>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: 'center',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 5,
+    shadowOpacity: 0.5
   },
   wrapper: {
     flex: 1,
@@ -50,7 +74,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     padding: 10,
     backgroundColor: color.primary,
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
   textTitle: {
     color: color.white,
@@ -59,8 +83,11 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 10,
-    flex: 1,
+    flex: 1
+  },
+  extraContentContainer: {
+    minHeight: 50
   }
-})
+});
 
-export default Card
+export default Card;
