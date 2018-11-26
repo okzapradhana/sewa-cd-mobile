@@ -54,6 +54,10 @@ class Home extends Component {
     this.setState({ allCd: allCd, isLoading: false });
   };
 
+  addtoCart = async () => {
+    Toast.success('Berhasil tambah cart', 2);
+  };
+
   _onPressFloatingButton = () => {
     NavigationService.navigate('AddCD');
   };
@@ -65,7 +69,7 @@ class Home extends Component {
         title={item.name}
         extraContent={
           <View style={{ flexDirection: 'row', padding: 8 }}>
-            <Button style={styles.buttonStyle}>
+            <Button style={styles.buttonStyle} onClick={this.addtoCart}>
               <Text style={{ color: 'white' }}>Buy</Text>
             </Button>
             <Button style={styles.buttonStyle}>
@@ -98,7 +102,7 @@ class Home extends Component {
               onRefresh={() => this.getCDList()}
               data={allCd}
               renderItem={({ item }) => this.renderContent(item)}
-              keyExtractor={item => item.id.toString()}
+              keyExtractor={item => item.id && item.id.toString()}
             />
           </View>
         )}
