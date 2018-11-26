@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { getCD } from '../controllers/CDController';
+import { getProfile } from '../controllers/UserController'
 import Card from '../components/Card';
 import { color } from '../libs/metrics';
 import FloatingButton from '../components/FloatingButton';
@@ -17,6 +18,7 @@ import { Button } from 'antd-mobile-rn';
 
 class Home extends Component {
   state = {
+    user_id: '',
     allCd: [],
     refreshData: false,
     isLoading: true
@@ -44,6 +46,7 @@ class Home extends Component {
 
   componentDidMount = async () => {
     await this.getCDList();
+    this.getCurrenUser();
   };
 
   getCDList = async () => {
@@ -51,6 +54,13 @@ class Home extends Component {
     console.log('Fetch CD List');
     this.setState({ allCd: allCd, isLoading: false });
   };
+
+  getCurrenUser = async() => {
+    const user = await getProfile()
+    console.log('Id user' , user[0].id)
+    this.setState({user_id: user[0].id})
+
+  }
 
   _onPressFloatingButton = () => {
     NavigationService.navigate('AddCD');
