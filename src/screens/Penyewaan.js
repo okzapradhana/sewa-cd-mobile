@@ -9,16 +9,26 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Card from '../components/Card';
 import { color } from '../libs/metrics';
-import FloatingButton from '../components/FloatingButton';
 import NavigationService from '../libs/NavigationService';
-import { Button } from 'antd-mobile-rn';
-import { getPenyewaan } from '../controllers/PenyewaanController';
+import { Button, Toast, Modal } from 'antd-mobile-rn';
+import {
+  getPenyewaan,
+  updatePenyewaan
+} from '../controllers/PenyewaanController';
+import moment from 'moment-timezone';
+import User from '../model/User';
+import { observer } from 'mobx-react';
 
 class Penyewaan extends Component {
   state = {
     allSewa: [],
     refreshData: false,
-    isLoading: true
+    isLoading: true,
+    visible: false,
+    sewa_id: '',
+    end_date: '',
+    return_date: '',
+    total: ''
   };
 
   static navigationOptions = ({ navigation }) => ({
@@ -41,35 +51,129 @@ class Penyewaan extends Component {
     headerTintColor: color.white
   });
 
+  onClose = () => {
+    this.setState({
+      visible: false
+    });
+  };
+
   componentDidMount = async () => {
     await this.getSewaList();
   };
 
   getSewaList = async () => {
-    const allSewa = await getPenyewaan();
-    console.log('Fetch Sewa List');
-    this.setState({ allSewa: allSewa, isLoading: false });
+    if (User.type === 'admin') {
+      const allSewa = await getPenyewaan();
+      this.setState({ allSewa: allSewa, isLoading: false });
+    } else {
+      const allSewa = await getPenyewaanUser();
+      this.setState({ allSewa: allSewa, isLoading: false });
+    }
+  };
+
+  returnCD = async () => {
+    const { sewa_id, end_date, return_date, total } = this.state;
+    const res = await updatePenyewaan(sewa_id, end_date, return_date, total);
+    if (res) {
+      this.setState({ visible: false });
+      Toast.success('CD berhasil dikembalikan', 2);
+      this.componentDidMount();
+    } else {
+      this.setState({ visible: false });
+      Toast.fail('CD gagal dikembalikan', 2);
+    }
   };
 
   renderContent = item => {
+    const startDate = moment(item.time_start)
+      .tz('America/Los_Angeles')
+      .format('YYYY-MM-DD HH:mm:ss');
+    const endDate = moment(item.time_end)
+      .tz('America/Los_Angeles')
+      .format('YYYY-MM-DD HH:mm:ss');
+    const returnDate = moment(item.time_return)
+      .tz('America/Los_Angeles')
+      .format('YYYY-MM-DD HH:mm:ss');
+    const nowDate = moment()
+      .tz('America/Los_Angeles')
+      .format('YYYY-MM-DD HH:mm:ss');
+    console.log(nowDate);
     return (
       <Card
+        clickable={User.type === 'admin' ? true : false}
         minHeight={100}
-        title={item.name}
+        title={`Id: ${item.id}`}
         extraContent={
-          <View style={{ flexDirection: 'row', padding: 8 }}>
-            <Button style={styles.buttonStyle}>
-              <Text style={{ color: 'white' }}>Buy</Text>
-            </Button>
-            <Button style={styles.buttonStyle}>
-              <Text style={{ color: 'white' }}>Rent</Text>
-            </Button>
-          </View>
+          User.type === 'admin' ? (
+            item.time_return === null ? (
+              <View style={{ flexDirection: 'row', padding: 8 }}>
+                <Button
+                  onClick={() =>
+                    this.setState({
+                      visible: true,
+                      sewa_id: item.id,
+                      end_date: endDate,
+                      return_date: nowDate,
+                      total: item.total
+                    })
+                  }
+                  style={styles.buttonStyle}
+                >
+                  <Text style={{ color: 'white' }}>Return</Text>
+                </Button>
+              </View>
+            ) : (
+              <View style={{ flexDirection: 'row', padding: 8 }}>
+                <Button
+                  onClick={() =>
+                    this.setState({
+                      visible: true,
+                      sewa_id: item.id,
+                      end_date: endDate,
+                      return_date: returnDate,
+                      total: item.total
+                    })
+                  }
+                  disabled
+                  style={styles.buttonStyle}
+                >
+                  <Text style={{ color: 'white' }}>Sudah Dikembalikan</Text>
+                </Button>
+              </View>
+            )
+          ) : (
+            ''
+          )
         }
       >
-        <View style={styles.cardContent}>
-          <Text>{`Price: Rp. ${item.harga}`}</Text>
-          <Text>{`Stock: ${item.stock}`}</Text>
+        <View style={{ flex: 1, flexDirection: 'column' }}>
+          <View style={styles.cardContent}>
+            <Text>{`Denda: Rp. ${item.denda}`}</Text>
+            <Text>{`Total: ${item.total}`}</Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <View style={{ flex: 1, flexDirection: 'column', marginTop: 10 }}>
+              <Text style={{ fontWeight: 'bold' }}>Waktu Pinjam</Text>
+              <Text>{startDate}</Text>
+              <Text style={{ fontWeight: 'bold', marginTop: 20 }}>
+                Batas Akhir Pinjam
+              </Text>
+              <Text>{endDate}</Text>
+              <Text style={{ fontWeight: 'bold', marginTop: 20 }}>
+                Waktu Kembali
+              </Text>
+              <Text>
+                {item.time_return === null ? 'Belum dikembalikan' : returnDate}
+              </Text>
+            </View>
+          </View>
         </View>
       </Card>
     );
@@ -94,6 +198,43 @@ class Penyewaan extends Component {
               keyExtractor={item => item.id.toString()}
             />
           </View>
+        )}
+        {User.type === 'admin' && (
+          <Modal
+            title="Return Confirm"
+            transparent
+            onClose={this.onClose}
+            maskClosable
+            visible={this.state.visible}
+            closable
+          >
+            <View style={{ minHeight: 80 }}>
+              <Text>Are you sure want to return the CD ?</Text>
+              <View
+                style={{
+                  flex: 1,
+                  marginTop: 20,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <Button
+                  type="warning"
+                  style={{ width: 90 }}
+                  onClick={this.onClose}
+                >
+                  No
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ width: 90 }}
+                  onClick={this.returnCD}
+                >
+                  Yes
+                </Button>
+              </View>
+            </View>
+          </Modal>
         )}
       </View>
     );
@@ -120,4 +261,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Penyewaan;
+export default observer(Penyewaan);

@@ -14,12 +14,18 @@ import Card from '../components/Card';
 import { color } from '../libs/metrics';
 import FloatingButton from '../components/FloatingButton';
 import NavigationService from '../libs/NavigationService';
-import Toast from 'antd-mobile-rn/lib/toast';
-import { Button, WhiteSpace, Modal, Checkbox, InputItem } from 'antd-mobile-rn';
+import {
+  Button,
+  WhiteSpace,
+  Modal,
+  Checkbox,
+  InputItem,
+  Toast
+} from 'antd-mobile-rn';
 import { RkButton } from 'react-native-ui-kitten';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { addPenyewaan } from '../controllers/PenyewaanController';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import User from '../model/User';
 import { observer } from 'mobx-react';
 
@@ -71,8 +77,9 @@ class Home extends Component {
 
   getCurrentUser = async () => {
     const user = await getProfile();
+    const idUser = user[0].id;
     console.log('Id user', user[0].id);
-    this.setState({ user_id: user[0].id });
+    this.setState({ user_id: idUser });
   };
 
   _onPressFloatingButton = () => {
@@ -90,35 +97,52 @@ class Home extends Component {
   };
 
   _handleDatePicked = date => {
-    console.log('A date has been picked: ', moment(date).format('MM-DD-YYYY'));
-    console.log('Now date', moment().format('MM-DD-YYYY'));
-    const nowDate = moment().format('YYYY-MM-DD');
-    const endDate = moment(date).format('YYYY-MM-DD');
-    this.setState({ date_start: nowDate, date_end: endDate });
+    console.log(
+      'A date has been picked: ',
+      moment(date)
+        .tz('Asia/Taipei')
+        .format('YYYY-MM-DD HH:mm:ss')
+    );
+    const endDate = moment(date)
+      .tz('Asia/Taipei')
+      .format('YYYY-MM-DD HH:mm:ss');
+    this.setState({ date_end: endDate });
     this._hideDateTimePicker();
   };
 
-  _addPenyewaan = () => {
-    const { user_id, cd_id, date_start, date_end } = this.state;
-    const res = await addPenyewaan(user_id, cd_id, date_start, date_end);
+  _addPenyewaan = async () => {
+    const { user_id, cd_id, code, date_end } = this.state;
+    const discount_id = code === null || undefined || '' ? null : code;
+    const res = await addPenyewaan(user_id, cd_id, discount_id, date_end, null);
+    if (res) {
+      this.setState({ visible: false });
+      Toast.success('Menyewa CD berhasil', 2);
+    } else {
+      this.setState({ visible: false });
+      Toast.fail('Menyewa CD gagal', 2);
+    }
   };
 
   renderContent = item => {
     return (
       <Card
-        clickable
+        clickable={User.type === 'user' ? true : false}
         minHeight={100}
         title={`${item.name}`}
         extraContent={
-          <View style={{ flexDirection: 'row', padding: 8 }}>
-            <RkButton
-              style={styles.buttonStyle1}
-              rkType="warning"
-              onPress={() => this.setState({ visible: true, cd_id: item.id })}
-            >
-              <Text style={{ color: 'white' }}>Rent</Text>
-            </RkButton>
-          </View>
+          User.type === 'user' ? (
+            <View style={{ flexDirection: 'row', padding: 8 }}>
+              <RkButton
+                style={styles.buttonStyle1}
+                rkType="warning"
+                onPress={() => this.setState({ visible: true, cd_id: item.id })}
+              >
+                <Text style={{ color: 'white' }}>Rent</Text>
+              </RkButton>
+            </View>
+          ) : (
+            ''
+          )
         }
       >
         <View style={styles.cardContent}>
@@ -150,7 +174,6 @@ class Home extends Component {
             />
           </View>
         )}
-        <FloatingButton onPress={() => this._onPressFloatingButton()} />
         <Modal
           title="Rent"
           transparent
