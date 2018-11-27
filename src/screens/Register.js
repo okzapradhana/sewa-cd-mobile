@@ -48,7 +48,7 @@ class Register extends Component {
   ]
 
   registerUser = async () => {
-    const { name, password, noTelp } = this.state
+    const { name, password, alamat, noTelp } = this.state
     
     /*Check each value*/
     const nameCheck = name === null | undefined ? '' : name
