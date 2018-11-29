@@ -5,6 +5,7 @@ import InputItem from 'antd-mobile-rn/lib/input-item'
 import Toast from 'antd-mobile-rn/lib/toast'
 import { RkButton } from 'react-native-ui-kitten'
 import NavigationService from '../libs/NavigationService';
+import { addNewGenre } from '../controllers/GenreController'
 
 class AddGenre extends Component {
 

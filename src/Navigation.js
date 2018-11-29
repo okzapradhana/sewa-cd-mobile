@@ -11,7 +11,6 @@ import Users from './screens/Users'
 import AddDiskon from './screens/AddDiskon'
 import AddGenre from './screens/AddGenre';
 import Penyewaan from './screens/Penyewaan';
-import { AsyncStorage } from 'react-native'
 import {observer} from 'mobx-react'
 
 const HomeStack = createStackNavigator({
